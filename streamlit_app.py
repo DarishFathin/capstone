@@ -42,23 +42,24 @@ mtrans = st.selectbox("Transportasi", ["Public_Transportation", "Walking", "Auto
 
 # Proses input
 input_df = pd.DataFrame({
-    'Gender': [gender],
     'Age': [age],
+    'Gender': [gender],
     'Height': [height],
     'Weight': [weight],
-    'family_history_with_overweight': [family_history],
+    'CALC': [calc],
     'FAVC': [favc],
     'FCVC': [fcvc],
     'NCP': [ncp],
-    'CAEC': [caec],
+    'SCC': [scc],
     'SMOKE': [smoke],
     'CH2O': [ch2o],
-    'SCC': [scc],
+    'family_history_with_overweight': [family_history],
     'FAF': [faf],
     'TUE': [tue],
-    'CALC': [calc],
+    'CAEC': [caec],
     'MTRANS': [mtrans]
 })
+
 
 # Prediksi saat tombol ditekan
 if st.button("Prediksi"):
