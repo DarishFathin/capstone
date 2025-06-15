@@ -55,6 +55,11 @@ if st.button("Prediksi"):
         if input_df[col].dtype == 'object':
             input_df[col] = input_df[col].astype('category').cat.codes
 
+    
+    st.write("Input columns:", input_df.columns.tolist())
+    st.write("Expected columns:", feature_names)
+
+
     # Normalisasi
     input_scaled = scaler.transform(input_df)
 
