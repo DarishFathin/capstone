@@ -63,12 +63,16 @@ input_df = pd.DataFrame({
 # Prediksi saat tombol ditekan
 if st.button("Prediksi"):
     # Cek apakah label valid
-    for col in label_encoders:
-        val = input_df[col].iloc[0]
-        if val not in label_encoders[col].classes_:
-            st.error(f"Nilai '{val}' di kolom '{col}' tidak dikenali saat training.")
-            st.stop()
-        input_df[col] = label_encoders[col].transform(input_df[col])
+    # Hanya encode kolom kategorikal
+categorical_cols = list(label_encoders.keys())
+
+for col in categorical_cols:
+    val = input_df[col].iloc[0]
+    if val not in label_encoders[col].classes_:
+        st.error(f"Nilai '{val}' di kolom '{col}' tidak dikenali saat training.")
+        st.stop()
+    input_df[col] = label_encoders[col].transform(input_df[col])
+
 
     # Susun dan transform input
     input_df = input_df[feature_names]
