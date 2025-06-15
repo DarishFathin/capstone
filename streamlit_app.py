@@ -8,11 +8,22 @@ model = joblib.load('obesity_model.pkl')
 scaler = joblib.load('scaler.pkl')
 feature_names = joblib.load('feature_names.pkl')
 
+# Mapping manual label ke kelas obesitas
+label_mapping = {
+    0: "Insufficient_Weight",
+    1: "Normal_Weight",
+    2: "Obesity_Type_I",
+    3: "Obesity_Type_II",
+    4: "Obesity_Type_III",
+    5: "Overweight_Level_I",
+    6: "Overweight_Level_II"
+}
+
 st.set_page_config(page_title="Prediksi Obesitas", layout="centered")
 st.title("🎯 Prediksi Tingkat Obesitas Berdasarkan Data Pribadi")
-
 st.markdown("Silakan masukkan informasi berikut:")
 
+# Input pengguna
 gender = st.selectbox("Jenis Kelamin", ["Male", "Female"])
 age = st.slider("Usia", 10, 100, 25)
 height = st.number_input("Tinggi Badan (m)", value=1.70)
@@ -31,6 +42,7 @@ calc = st.selectbox("Konsumsi alkohol", ["no", "Sometimes", "Frequently", "Alway
 mtrans = st.selectbox("Jenis transportasi utama", ["Public_Transportation", "Walking", "Automobile", "Motorbike", "Bike"])
 
 if st.button("Prediksi"):
+    # Buat dataframe input
     input_df = pd.DataFrame({
         'Gender': [gender],
         'Age': [age],
@@ -50,23 +62,19 @@ if st.button("Prediksi"):
         'MTRANS': [mtrans]
     })
 
-    # Encode kategorikal ke numerik
+    # Encode kategorikal ke numerik seperti saat training
     for col in input_df.columns:
         if input_df[col].dtype == 'object':
             input_df[col] = input_df[col].astype('category').cat.codes
 
-    
-    st.write("Input columns:", input_df.columns.tolist())
-    st.write("Expected columns:", feature_names)
-
-
-    # Susun ulang kolom agar cocok dengan saat training
+    # Urutkan sesuai training
     input_df = input_df[feature_names]
 
     # Normalisasi
     input_scaled = scaler.transform(input_df)
 
+    # Prediksi dan mapping label
+    prediction = model.predict(input_scaled)[0]
+    predicted_class = label_mapping.get(prediction, "Unknown")
 
-    # Prediksi
-    prediction = model.predict(input_scaled)
-    st.success(f"Prediksi tingkat obesitas: **{prediction[0]}**")
+    st.success(f"Tingkat obesitas Anda diprediksi sebagai: **{predicted_class.replace('_', ' ')}**")
