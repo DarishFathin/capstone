@@ -67,21 +67,17 @@ if st.button("Prediksi"):
     # Encode kategorikal ke numerik seperti saat training
     # Gunakan label encoder yang sama seperti saat training
 for col in label_encoders:
-    val = input_df[col].iloc[0]
-    if val not in label_encoders[col].classes_:
-        st.error(f"Input '{val}' di kolom '{col}' tidak dikenali saat training.")
-        st.stop()
-    input_df[col] = label_encoders[col].transform(input_df[col])
+        val = input_df[col].iloc[0]
+        if val not in label_encoders[col].classes_:
+            st.error(f"Input '{val}' di kolom '{col}' tidak dikenali saat training.")
+            st.stop()
+        input_df[col] = label_encoders[col].transform(input_df[col])
+
 
     # Urutkan sesuai training
     input_df = input_df[feature_names]
-
-    # Transform dan prediksi
     input_scaled = scaler.transform(input_df)
     prediction = model.predict(input_scaled)[0]
-
-    # Prediksi dan mapping label
-    # prediction = model.predict(input_scaled)[0]
     predicted_class = label_mapping.get(prediction, "Unknown")
 
     st.success(f"Tingkat obesitas Anda diprediksi sebagai: **{predicted_class.replace('_', ' ')}**")
