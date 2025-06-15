@@ -67,6 +67,10 @@ if st.button("Prediksi"):
     # Encode kategorikal ke numerik seperti saat training
     # Gunakan label encoder yang sama seperti saat training
 for col in label_encoders:
+    val = input_df[col].iloc[0]
+    if val not in label_encoders[col].classes_:
+        st.error(f"Input '{val}' di kolom '{col}' tidak dikenali saat training.")
+        st.stop()
     input_df[col] = label_encoders[col].transform(input_df[col])
 
     # Urutkan sesuai training
