@@ -7,6 +7,8 @@ import joblib
 model = joblib.load('obesity_model.pkl')
 scaler = joblib.load('scaler.pkl')
 feature_names = joblib.load('feature_names.pkl')
+label_encoders = joblib.load('label_encoders.pkl')
+
 
 # Mapping manual label ke kelas obesitas
 label_mapping = {
@@ -63,9 +65,9 @@ if st.button("Prediksi"):
     })
 
     # Encode kategorikal ke numerik seperti saat training
-    for col in input_df.columns:
-        if input_df[col].dtype == 'object':
-            input_df[col] = input_df[col].astype('category').cat.codes
+    # Gunakan label encoder yang sama seperti saat training
+for col in label_encoders:
+    input_df[col] = label_encoders[col].transform(input_df[col])
 
     # Urutkan sesuai training
     input_df = input_df[feature_names]
