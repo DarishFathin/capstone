@@ -62,8 +62,8 @@ input_df = pd.DataFrame({
 
 # Prediksi saat tombol ditekan
 if st.button("Prediksi"):
-    # Hanya encode kolom kategorikal
-    categorical_cols = list(label_encoders.keys())
+    # Transform kolom kategorikal saja
+    categorical_cols = list(label_encoders.keys())  # Sudah pasti aman
 
     for col in categorical_cols:
         val = input_df[col].iloc[0]
@@ -72,14 +72,10 @@ if st.button("Prediksi"):
             st.stop()
         input_df[col] = label_encoders[col].transform(input_df[col])
 
-    # Susun ulang kolom sesuai fitur training
+    # Susun, transformasi, dan prediksi
     input_df = input_df[feature_names]
-
-    # Normalisasi dan prediksi
     input_scaled = scaler.transform(input_df)
     prediction = model.predict(input_scaled)[0]
-
-    # Mapping hasil prediksi
     predicted_class = label_mapping.get(prediction, "Unknown")
     st.success(f"Tingkat obesitas Anda diprediksi sebagai: **{predicted_class.replace('_', ' ')}**")
 
