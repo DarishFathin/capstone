@@ -62,24 +62,24 @@ input_df = pd.DataFrame({
 
 # Prediksi saat tombol ditekan
 if st.button("Prediksi"):
-    # Cek apakah label valid
     # Hanya encode kolom kategorikal
-categorical_cols = list(label_encoders.keys())
+    categorical_cols = list(label_encoders.keys())
 
-for col in categorical_cols:
-    val = input_df[col].iloc[0]
-    if val not in label_encoders[col].classes_:
-        st.error(f"Nilai '{val}' di kolom '{col}' tidak dikenali saat training.")
-        st.stop()
-    input_df[col] = label_encoders[col].transform(input_df[col])
+    for col in categorical_cols:
+        val = input_df[col].iloc[0]
+        if val not in label_encoders[col].classes_:
+            st.error(f"Nilai '{val}' di kolom '{col}' tidak dikenali saat training.")
+            st.stop()
+        input_df[col] = label_encoders[col].transform(input_df[col])
 
-
-    # Susun dan transform input
+    # Susun ulang kolom sesuai fitur training
     input_df = input_df[feature_names]
+
+    # Normalisasi dan prediksi
     input_scaled = scaler.transform(input_df)
-
-    # Prediksi
     prediction = model.predict(input_scaled)[0]
-    predicted_class = label_mapping.get(prediction, "Unknown")
 
-    st.success(f"Tingkat obesitas Anda diprediksi sebagai: **{predicted_class}**")
+    # Mapping hasil prediksi
+    predicted_class = label_mapping.get(prediction, "Unknown")
+    st.success(f"Tingkat obesitas Anda diprediksi sebagai: **{predicted_class.replace('_', ' ')}**")
+
