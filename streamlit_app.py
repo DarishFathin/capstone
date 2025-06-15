@@ -6,6 +6,7 @@ import joblib
 # Load model dan scaler
 model = joblib.load('obesity_model.pkl')
 scaler = joblib.load('scaler.pkl')
+feature_names = joblib.load('feature_names.pkl')
 
 st.set_page_config(page_title="Prediksi Obesitas", layout="centered")
 st.title("🎯 Prediksi Tingkat Obesitas Berdasarkan Data Pribadi")
