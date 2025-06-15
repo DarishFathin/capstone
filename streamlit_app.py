@@ -60,8 +60,12 @@ if st.button("Prediksi"):
     st.write("Expected columns:", feature_names)
 
 
+    # Susun ulang kolom agar cocok dengan saat training
+    input_df = input_df[feature_names]
+
     # Normalisasi
     input_scaled = scaler.transform(input_df)
+
 
     # Prediksi
     prediction = model.predict(input_scaled)
